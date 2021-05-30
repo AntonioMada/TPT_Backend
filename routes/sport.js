@@ -69,15 +69,12 @@ function updateSport(req, res) {
 
 // suppression d'un sport (DELETE)
 function deleteSport(req, res) {
-    Sport.findOne({ id: req.params.id }, (err, sport) => {
-        if (err) {
-          res.send(err);
-        }
-        Sport.deleteOne({ id: sport.id }, function (err) {
-            if (err) return handleError(err);
-            console.log(sport.name+ ' delete');
-          });
-      });
+	Sport.findByIdAndRemove(req.params.id, (err, sport) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json({ message: `${sport.name} deleted` });
+	});
 }
 
 module.exports = {

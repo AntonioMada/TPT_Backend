@@ -70,15 +70,12 @@ function updateTeam(req, res) {
 
 // suppression d'un team (DELETE)
 function deleteTeam(req, res) {
-    Team.findOne({ id: req.params.id }, (err, team) => {
-        if (err) {
-          res.send(err);
-        }
-        Team.deleteOne({ id: team.id }, function (err) {
-            if (err) return handleError(err);
-            console.log(team.name+ ' delete');
-          });
-      });
+	Team.findByIdAndRemove(req.params.id, (err, team) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json({ message: `${team.name} deleted` });
+	});
 }
 
 module.exports = {

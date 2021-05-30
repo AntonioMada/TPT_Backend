@@ -73,15 +73,13 @@ function updateLeague(req, res) {
 
 // suppression d'un league (DELETE)
 function deleteLeague(req, res) {
-    League.findOne({ id: req.params.id }, (err, league) => {
-        if (err) {
-          res.send(err);
-        }
-        League.deleteOne({ id: league.id }, function (err) {
-            if (err) return handleError(err);
-            console.log(league.name+ ' delete');
-          });
-      });
+
+	League.findByIdAndRemove(req.params.id, (err, league) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json({ message: `${league.name} deleted` });
+	});
 }
 
 module.exports = {

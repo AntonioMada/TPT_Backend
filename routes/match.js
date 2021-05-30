@@ -85,15 +85,12 @@ function updateMatch(req, res) {
 
 // suppression d'un match (DELETE)
 function deleteMatch(req, res) {
-    Match.findOne({ id: req.params.id }, (err, match) => {
-        if (err) {
-          res.send(err);
-        }
-        Match.deleteOne({ id: match.id }, function (err) {
-            if (err) return handleError(err);
-            console.log(match.name+ ' delete');
-          });
-      });
+	Match.findByIdAndRemove(req.params.id, (err, match) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json({ message: `${match.name} deleted` });
+	});
 }
 
 module.exports = {
