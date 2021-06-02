@@ -1,0 +1,686 @@
+{
+	"info": {
+		"_postman_id": "94499a0a-c0aa-40b6-a98e-10db2798c56f",
+		"name": "Paris API REST",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get List Sports",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8010/api/sports",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"sports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Sport",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8010/api/sports/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"sports",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Sport without upload",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Football",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"value": "sport-1622461586791.png",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8010/api/sports",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"sports"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "2",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": "Footballist",
+							"disabled": true
+						},
+						{
+							"key": "image",
+							"value": "sport-1622408614880.png",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Sport with upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Footballaa",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"value": "sport-1622461457803.png",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/Antho/OneDrive/Images/Anthony logo/logo_actu_jv.png"
+						},
+						{
+							"key": "checkfile",
+							"value": "0",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8010/api/sports/file",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"sports",
+						"file"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Sport",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/Antho/OneDrive/Images/Anthony logo/logo_actu_jv.png"
+						},
+						{
+							"key": "id",
+							"value": "103",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Dragonball",
+							"type": "text"
+						},
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8010/api/sports/insert",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"sports",
+						"insert"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Sport",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8010/api/sports/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"sports",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get List Leagues paginate",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "page",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8010/api/leagues",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"leagues"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get League",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8010/api/leagues/101",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"leagues",
+						"101"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update League without upload",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "101",
+							"type": "text"
+						},
+						{
+							"key": "id_sport",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Ligue 3",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"value": "league-1622476880356.PNG",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8010/api/leagues",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"leagues"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update League with upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/Antho/OneDrive/Images/Captures d’écran/Capture.PNG"
+						},
+						{
+							"key": "id",
+							"value": "101",
+							"type": "text"
+						},
+						{
+							"key": "id_sport",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Ligue 2.2",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"value": "league-1622478385869.PNG",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8010/api/leagues/file",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"leagues",
+						"file"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create League",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/Antho/OneDrive/Images/Captures d’écran/Capture.PNG"
+						},
+						{
+							"key": "id",
+							"value": "101",
+							"type": "text"
+						},
+						{
+							"key": "id_sport",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Ligue 2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8010/api/leagues/insert",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"leagues",
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete League",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8010/api/leagues/101",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"leagues",
+						"101"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get List Teams paginate",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "page",
+							"value": "5",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8010/api/teams",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"teams"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Teams",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:8010/api/teams/51",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"teams",
+						"51"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create team",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "52",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Real madrid",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/Antho/OneDrive/Images/Captures d’écran/Capture.PNG"
+						},
+						{
+							"key": "id_league",
+							"value": "7",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8010/api/teams/insert",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"teams",
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Team without upload",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "52",
+							"type": "text"
+						},
+						{
+							"key": "id_league",
+							"value": "7",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Real madrida gasy",
+							"type": "text"
+						},
+						{
+							"key": "logo",
+							"value": "team-1622490077189.PNG",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8010/api/teams",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"teams"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Team with upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "52",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Bayern Munchene",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/Antho/OneDrive/Images/Captures d’écran/Capture.PNG"
+						},
+						{
+							"key": "id_league",
+							"value": "7",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"value": "team-1622490077189.PNG",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8010/api/teams/file",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"teams",
+						"file"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
