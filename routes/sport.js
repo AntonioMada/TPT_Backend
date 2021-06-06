@@ -1,90 +1,163 @@
 let Sport = require("../model/sport");
+const uploadFile = require("../utils/upload");
+const { deleteFile } = require("./file.controller");
 ;
 //list sport
-function getSport(req, res) { 
-  
+function getSport(req, res) {
+  console.log("call getSport()");
+  try {
+    var aggregateQuery = Sport.aggregate([
+      {
+        $lookup: {
+          from: "leagues",
+          localField: "id",
+          foreignField: "id_sport",
+          as: "league",
+        },
+      },
+    ]);
+    Sport.aggregatePaginate(
+      aggregateQuery,
+      {
+      
+        page: parseInt(req.query.page) || 1,
+        limit: parseInt(req.query.limit) || 10,
+      },
+      (err, sport) => {
+        if (err) {
+          res.send(err);
+        }
+        res.send(sport);
+      }
+    );
+  } catch (e) {
+    console.log(e);
+    res.status(500);
+    res.json({ message: e.message });
+  }
+}
+
+function getOneSport(req, res) {
+  var id = Number(req.params.id);
+
   Sport.aggregate(
     [
-      { $lookup: {from: "leagues", localField: "id", foreignField: "id_sport", as: "league"} },
- 
+      {
+        $match: {
+          id: id,
+        },
+      },
+      {
+        $lookup: {
+          from: "leagues",
+          localField: "id",
+          foreignField: "id_sport",
+          as: "league",
+        },
+      },
+      { $limit: 1 },
     ],
     (err, sport) => {
       if (err) {
         res.send(err);
       }
-      res.send(sport); 
+      res.send(sport[0]);
     }
   );
 }
 
-function getOneSport(req, res) {
-  var id = Number(req.params.id);
-  
-  Sport.aggregate(
-    [
-      { $match:
-        {
-          id : id
-        } 
-      },{ $lookup: {from: "leagues", localField: "id", foreignField: "id_sport", as: "league"} },
-      {$limit :1}
-    ],
-    (err, assignment) => {
-      if (err) {
-        res.send(err);
-      }
-      res.send(assignment[0]);
-    }
-  );
+async function insertSportWithUpload(req, res){
+  try {
+    console.log("insert sport with upload image");
+    let newFileName = `sport-${ new Date().getTime() }`;
+    let path = "sports";
+    let upload = uploadFile(path, newFileName);
+    await upload(req, res);
+    let fileExtension = req.file.originalname.split('.')[1];
+    insertSport(req, res, `${newFileName}.${fileExtension}`);
+  } catch (error) {
+    res.status(500).send({
+      message: `Could not upload the file: ${req.file.originalname}. ${error}`,
+    });
   }
+}
 
 // Ajout d'un sport (POST)
-function insertSport(req, res) {
-  let sport = new Sport();
-  sport.id = req.body.id;
-  sport.image = req.body.image;
-  sport.name = req.body.name;
-
-  console.log("POST reçu :");
-  console.log(sport);
-  sport.save((err) => {
-    if (err) {
-      res.send("cant post sport ", err);
-    }
-    res.json({ message: `${sport.nom} saved!` });
-  });
+function insertSport(req, res, newFileName) {
+  try {
+    let sport = new Sport();
+    sport.id = req.body.id;
+    sport.image = newFileName;
+    sport.name = req.body.name;
+    sport.save((err) => {
+      if (err) {
+        res.send("can't post sport ", err);
+      }
+      res.json({ message: `${sport.name} saved!` });
+    }); 
+  } catch (error) {
+    res.status(500).send({
+      message: ` Sport : ${req.body.name} is not inserted !  ${err}`,
+    });
+  }
 }
 
 // Update d'un sport (PUT)
-function updateSport(req, res) {
-  console.log("UPDATE recu sport : ");
-  console.log(req.body);
+async function updateSportWithUpload(req, res) {
+  try {
+      console.log("update sport with upload image");
+      let newFileName = `sport-${ new Date().getTime() }`;
+      let path = "sports";
+      let upload = uploadFile(path, newFileName);
+      await upload(req, res);
+      await deleteFile(req, res, path);
+      let fileExtension = req.file.originalname.split('.')[1];
+      updateSport(req.body.id, req.body.name, `${newFileName}.${fileExtension}`, res);
+  } catch (error) {
+    res.status(500).send({
+      message: ` File : ${req.body.image} is not uploaded !  ${error}`,
+    });
+  }
+}
 
-    Sport.findOneAndUpdate({id:req.body.id },{ name: req.body.name ,image: req.body.image }, function (err) {
-        if (err) return handleError(err);
-        console.log(req.body.name+ ' updated');
-      });
+function updateSportWithoutUpload(req, res){
+  try {
+    updateSport(req.body.id, req.body.name, req.body.image, res);
+  } catch (error) {
+    res.status(500).send({
+      message: ` Sport : ${req.body.name} is not updated !  ${error}`,
+    });
+  }
+}
 
+function updateSport(id, name, image, res){
+  Sport.findOneAndUpdate({id: id },{ name: name, image: image }, function (err) {
+    if (err) return handleError(err);
+    res.status(200).send({
+      message: "Updated the sport: " + name + " successfully!",
+    });
+  });
 }
 
 // suppression d'un sport (DELETE)
 function deleteSport(req, res) {
-    Sport.findOne({ id: req.params.id }, (err, sport) => {
-        if (err) {
-          res.send(err);
-        }
-        Sport.deleteOne({ id: sport.id }, function (err) {
-            if (err) return handleError(err);
-            console.log(sport.name+ ' delete'); 
-			res.status(200).send({message:"ok"});
-          });
-      });
+  Sport.findOne({ id: req.params.id }, (err, sport) => {
+    if (err) {
+      res.send(err);
+    }
+    Sport.deleteOne({ id: sport.id }, function (err) {
+      if (err) return handleError(err);
+      console.log(sport.name + " delete");
+      res.status(200).send({ message: sport.name + " deleted" });
+    });
+  });
 }
 
 module.exports = {
  getSport,
- insertSport,
- updateSport,
+ insertSportWithUpload,
+ updateSportWithUpload,
+ updateSportWithoutUpload,
  deleteSport,
  getOneSport
 };

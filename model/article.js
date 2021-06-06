@@ -3,12 +3,12 @@ let mongoose = require("mongoose");
 let Schema = mongoose.Schema;
 var aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 
-let LeagueSchema = Schema({
+let ArticleSchema = Schema({
   id: Number,
-  id_sport: Number,
   image: String,
-  name: String,
+  date: Date,
+  description: String,
 });
 
-LeagueSchema.plugin(aggregatePaginate);
-module.exports = mongoose.model("League", LeagueSchema);
+ArticleSchema.plugin(aggregatePaginate);
+module.exports = mongoose.model("Article", ArticleSchema);  
