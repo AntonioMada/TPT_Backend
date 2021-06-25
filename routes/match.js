@@ -2,7 +2,31 @@ let Match = require("../model/match");
 //list match
 function getMatch(req, res) {
   try {
-    var aggregateQuery = Match.aggregate([
+    var team=parseInt(req.query.id_team)
+    var resltteam
+    team ? resltteam=team :resltteam={$exists: true} //find all if don't have params
+    var date=req.query.date
+    var resltdate
+    date ? resltdate=date:resltdate={$exists: true} //find all if don't have params
+    var score=parseInt(req.query.score)
+    var resltscore
+    score ? resltscore=score :resltscore={$exists: true}
+    var aggregateQuery = Match.aggregate([     
+      { 
+        $match: { 
+          $or: [{ team_1: resltteam }, { team_2:resltteam }]
+       }
+      },
+      { 
+        $match: { 
+          date: resltdate
+       }
+      },
+      { 
+        $match: { 
+          $or: [{ score_1:resltscore }, { score_2:resltscore }]
+       }
+      },
       {
         $lookup: {
           from: "teams",
@@ -40,7 +64,51 @@ function getMatch(req, res) {
     res.json({ message: e.message });
   }
 }
-
+function getPopularMatch(req, res) {
+  try {
+    var aggregateQuery = Match.aggregate([     
+      {
+        $lookup: {
+          from: "teams",
+          localField: "team_1",
+          foreignField: "id",
+          as: "team_1",
+        },
+      },
+      {
+        $lookup: {
+          from: "teams",
+          localField: "team_2",
+          foreignField: "id",
+          as: "team_2",
+        },
+      },   
+      {      
+      $sort: { 
+        popularite:"$popularite"
+       } 
+      }
+    ]);
+    Match.aggregatePaginate(
+      aggregateQuery,
+      {
+      
+        page: parseInt(req.query.page) || 1,
+        limit: parseInt(req.query.limit) || 5,
+      },
+      (err, sport) => {
+        if (err) {
+          res.send(err);
+        }
+        res.send(sport);
+      }
+    );
+  } catch (e) {
+    console.log(e);
+    res.status(500);
+    res.json({ message: e.message });
+  }
+}
 function getOneMatch(req, res) {
   var id = Number(req.params.id);
   Match.aggregate(
@@ -77,6 +145,35 @@ function getOneMatch(req, res) {
   );
 }
 
+function getOneMatchSpec(idmatch){
+  var id = Number(idmatch);
+  return Match.aggregate(
+    [
+      {
+        $match: {
+          id: id,
+        },
+      },
+      {
+        $lookup: {
+          from: "teams",
+          localField: "team_1",
+          foreignField: "id",
+          as: "team_1",
+        },
+      },
+
+      {
+        $lookup: {
+          from: "teams",
+          localField: "team_2",
+          foreignField: "id",
+          as: "team_2",
+        },
+      },
+    ]
+  );
+}
 // Ajout d'un match (POST)
 function insertMatch(req, res) {
   let match = new Match();
@@ -145,4 +242,6 @@ module.exports = {
   updateMatch,
   deleteMatch,
   getOneMatch,
+  getOneMatchSpec,
+  getPopularMatch
 };

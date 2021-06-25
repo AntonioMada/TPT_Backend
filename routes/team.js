@@ -7,7 +7,13 @@ const { deleteFile } = require("./file.controller");
 //list team
 function getTeam(req, res) {
   try {
+    var league=parseInt(req.query.id_league)
+    var resltleague
+    league ? resltleague=league :resltleague={$exists: true} //find all if don't have params
     var aggregateQuery = Team.aggregate([
+      { 
+        $match: { id_league:  resltleague }
+      },
       {
         $lookup: {
           from: "leagues",
@@ -103,7 +109,6 @@ function insertTeam(req, res, newFileName) {
   team.name = req.body.name;
 
   team.id_league = req.body.id_league;
-  console.log("POST reçu :");
   console.log(team);
   team.save((err) => {
     if (err) {
@@ -144,6 +149,7 @@ function updateTeamWithoutUpload(req, res){
 // Update d'un team (PUT)
 function updateTeam(id, idleague, name, image,  res) {
     Team.findOneAndUpdate({id: id },{ id_league: idleague, name: name ,logo: image }, function (err) {
+      console.log(idleague)
         if (err) return handleError(err);
         res.status(200).send({
           message: "Updated the team successfully!",

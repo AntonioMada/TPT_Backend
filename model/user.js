@@ -3,6 +3,7 @@ let Schema = mongoose.Schema;
 var aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 
 const UserSchema = Schema({
+  id: Number,
   email: { type: String, required: true },
   name: { type: String, required: true },
   username: { type: String, required: true },
@@ -10,6 +11,7 @@ const UserSchema = Schema({
   birthday: { type: Date, required: true },
   password: { type: String, required: true },
   isAdmin: { type: Boolean, required: true },
+  isEnable:{ type: Boolean, required: true }
 });
 UserSchema.plugin(aggregatePaginate);
 

@@ -4,9 +4,15 @@ const { deleteFile } = require("./file.controller");
 
 //list league
 function getLeague(req, res) {
-  try {
+  try { 
+    var sport=parseInt(req.query.id_sport)
+    var resltsport
+    sport ? resltsport=sport :resltsport={$exists: true}//find all if don't have params
     var aggregateQuery = League.aggregate([
-      {
+      { 
+        $match: { id_sport:  resltsport }
+      },
+      { 
         $lookup: {
           from: "sports",
           localField: "id_sport",
@@ -61,7 +67,6 @@ function getOneLeague(req, res) {
           as: "sport",
         },
       },
-
       {
         $lookup: {
           from: "teams",
@@ -84,12 +89,9 @@ function getOneLeague(req, res) {
   var id = Number(req.params.id);
       League.aggregate(
         [
-          { 
-            $match:
-            {
-              id : id
-            } 
-          },
+           {  $match:
+            {id : id } 
+           },
           { $lookup: {from: "sports", localField: "id_sport", foreignField: "id", as: "sport"} },
      
           { $lookup: {from: "teams", localField: "id", foreignField: "id_league", as: "team"} },
@@ -154,6 +156,7 @@ async function updateLeagueWithUpload(req, res){
 
 function updateLeagueWithoutUpload(req, res){
   try {
+    console.log(req.body)
     updateLeague(req.body.id, req.body.id_sport, req.body.name, req.body.image, res);
   } catch (error) {
     res.status(500).send({

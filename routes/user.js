@@ -5,6 +5,7 @@ let User = require("../model/user");
 var DuplicatedRowException = require("../Exceptions/DuplicatedRowException");
 var UserNotFoundException = require("../Exceptions/UserNotFoundException");
 const user = require("../model/user");
+const { findOneAndUpdate } = require("../model/user");
 
 async function inscription(req, res) {
   let email = req.body.email;
@@ -94,10 +95,57 @@ async function getMe(req, res) {
       .send("Un problème est survenu lors de la recherche de l'utilisateur");
   }
 }
-
+async function getAllUser(req, res) {
+  try {
+    var aggregateQuery = User.aggregate();
+    User.aggregatePaginate(
+      aggregateQuery,
+      {
+        page: parseInt(req.query.page) || 1,
+        limit: parseInt(req.query.limit) || 1000,
+      },
+      (err, user) => {
+        if (err) {
+          res.send(err);
+        }
+        res.send(user);
+      }
+    );
+  } catch (e) {
+    console.log(e);
+    res.status(500);
+    res.json({ message: e.message });
+  }
+}
+async function updatestatus(req, res) {
+  try {
+    const user = await User.findOne({ id: req.body.id });
+    await User.updateOne(
+      { id: user.id },
+      { isEnable: user.isEnable ? false : true }
+    );
+    if (!user) {
+      throw new UserNotFoundException("Cet utilisteur n'existe pas");
+    }
+    res.status(200).send({
+      message: "Updated the use:  " + user.name + " successfully!",
+    });
+  } catch (e) {
+    res.status(500);
+    res.json({ message: e.message });
+  }
+}
+async function test(req, res) {
+  res.status(200).send({
+    message: "Hello world !!!!!",
+  });
+}
 module.exports = {
+  updatestatus,
   inscription,
   generateToken,
   login,
   getMe,
+  getAllUser,
+  test,
 };

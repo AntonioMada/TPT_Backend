@@ -13,11 +13,15 @@ let team = require("./routes/team");
 let file = require("./routes/file.controller");
 let user = require("./routes/user");
 let article = require("./routes/article");
+let classement = require("./routes/classement");
+let paris = require("./routes/pari");
+let payment = require("./routes/payment");
 
 global.__basedir = __dirname;
 let match = require("./routes/match");
 
 let mongoose = require("mongoose");
+const { getClassement } = require("./routes/classement");
 mongoose.Promise = global.Promise;
 const uri =
   "mongodb+srv://tsotra1:tsotra1@cluster0.sf5fi.mongodb.net/Bet?retryWrites=true&w=majority";
@@ -62,52 +66,55 @@ let port = process.env.PORT || 8010;
 // les routes
 const prefix = "/api";
 
-app.route(prefix + '/sports')
+app
+  .route(prefix + "/sports")
   .get(sport.getSport)
   .put(sport.updateSportWithoutUpload)
   .post(sport.insertSportWithUpload);
-  
-app.route(prefix + '/sports/file')
-  .post(sport.updateSportWithUpload);
 
-app.route(prefix + "/sports/:id")
+app.route(prefix + "/sports/file").post(sport.updateSportWithUpload);
+
+app
+  .route(prefix + "/sports/:id")
   .get(sport.getOneSport)
   .delete(sport.deleteSport);
 
-  
-app.route(prefix + '/leagues')
+app
+  .route(prefix + "/leagues")
   .get(league.getLeague)
   .put(league.updateLeagueWithoutUpload)
   .post(league.insertLeagueWithUpload);
 
-app.route(prefix + '/leagues/file')
-  .post(league.updateLeagueWithUpload);
+app.route(prefix + "/leagues/file").post(league.updateLeagueWithUpload);
 
-app.route(prefix + "/leagues/:id")
+app
+  .route(prefix + "/leagues/:id")
   .get(league.getOneLeague)
   .delete(league.deleteLeague);
 
-app.route(prefix + "/teams/:id")
+app
+  .route(prefix + "/teams/:id")
   .get(team.getOneTeam)
   .delete(team.deleteTeam);
 
-app.route(prefix + '/teams')
+app
+  .route(prefix + "/teams")
   .get(team.getTeam)
   .put(team.updateTeamWithoutUpload)
   .post(team.insertTeamWithUpload);
 
-app.route(prefix + '/teams/file')
-.post(team.updateTeamWithUpload);
+app.route(prefix + "/teams/file").post(team.updateTeamWithUpload);
 
-app.route(prefix + '/articles')
+app
+  .route(prefix + "/articles")
   .get(article.getArticle)
   .post(article.insertArticleWithUpload)
   .put(article.updateArticleWithoutUpload);
-  
-app.route(prefix + '/articles/file')
-  .post(article.updateArticleWithUpload)
 
-app.route(prefix + '/articles/:id')
+app.route(prefix + "/articles/file").post(article.updateArticleWithUpload);
+
+app
+  .route(prefix + "/articles/:id")
   .get(article.getOneArticle)
   .delete(article.deleteArticle);
 
@@ -117,19 +124,55 @@ app.route(prefix + "/files/:name").get(file.download);
 
 app.route(prefix + "/delete/:name").delete(file.deleteFile);
 
-app.route(prefix + "/matchs")
+app
+  .route(prefix + "/matchs")
   .get(match.getMatch)
   .post(match.insertMatch)
   .put(match.updateMatch);
 
-app.route(prefix + "/matchs/:id")
+app.route(prefix + "/matchs/popular").get(match.getPopularMatch);
+app
+  .route(prefix + "/matchs/:id")
   .get(match.getOneMatch)
   .delete(match.deleteMatch);
+
+// axios service api grails
+// paris
+app.route(prefix + "/paris").get(paris.getParis);
+app.route(prefix + "/pari").post(paris.postPariWithOneDetail);
+app.route(prefix + "/pari").patch(paris.patchPari);
+app.route(prefix + "/pari/custom").get(paris.getPariCustom);
+app.route(prefix + "/pari/details/notpayed").get(paris.getPariInProgress);
+app.route(prefix + "/pari/details").post(paris.insertPariDetail);
+app.route(prefix + "/pari/statistic").get(paris.getPariStatistic);
+app.route(prefix + "/match/finished").put(paris.actionMatchFinished);
+
+// axios service api grails
+// paris
+app.route(prefix + "/payments").get(payment.getPayments);
+app.route(prefix + "/payments").post(payment.insertPayment);
+// app.route(prefix + "/payments").put(payment.updatePayment);
+// app.route(prefix + "/payments").patch(payment.updatePatchPayment);
+
+app.route(prefix + "/movement/after/match").post(payment.createMvntAfterMatch);
+app.route(prefix + "/solde/site").get(payment.getSolde);
+app.route(prefix + "/historic").post(payment.paymentsHistoricByUserByType);
+app.route(prefix + "/user/investment").post(payment.topUserWithMiseMax);
+
+// axios service api grails
+// match
+app.route(prefix + "/match/mostbet").get(paris.getMatchMostBet);
 
 // users
 app.route(prefix + "/users").post(user.inscription);
 app.route(prefix + "/user/login").post(user.login);
 app.route(prefix + "/user/me").post(user.getMe);
+app.route(prefix + "/user").get(user.getAllUser);
+app.route(prefix + "/user").put(user.updatestatus);
+
+app.route(prefix + "/test").get(user.test);
+//classement
+app.route(prefix + "/classement").get(classement.getClassementDomicile);
 
 // .get(match.getOneMatch)
 // On démarre le serveur

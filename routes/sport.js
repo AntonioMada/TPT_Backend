@@ -93,7 +93,7 @@ function insertSport(req, res, newFileName) {
       if (err) {
         res.send("can't post sport ", err);
       }
-      res.json({ message: `${sport.name} saved!` });
+      res.json({ message: `${sport.name}  ` });
     }); 
   } catch (error) {
     res.status(500).send({
@@ -112,6 +112,7 @@ async function updateSportWithUpload(req, res) {
       await upload(req, res);
       await deleteFile(req, res, path);
       let fileExtension = req.file.originalname.split('.')[1];
+      // console.log(req.body);
       updateSport(req.body.id, req.body.name, `${newFileName}.${fileExtension}`, res);
   } catch (error) {
     res.status(500).send({
@@ -131,6 +132,9 @@ function updateSportWithoutUpload(req, res){
 }
 
 function updateSport(id, name, image, res){
+  console.log("id = " + id)
+  console.log("name = " + name)
+  console.log("image = " + image)
   Sport.findOneAndUpdate({id: id },{ name: name, image: image }, function (err) {
     if (err) return handleError(err);
     res.status(200).send({

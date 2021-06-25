@@ -3,10 +3,19 @@ const uploadFile = require("../utils/upload");
 const { deleteFile } = require("./file.controller");
 
 function getArticle(req, res) {
-    console.log("call getArticle()");
+  var date=req.query.date
+  var datereslt
+  date ? datereslt=new Date(date) :datereslt={$exists: true}
     try {
+      var aggregateQuery = Article.aggregate([     
+        { 
+          $match: { 
+           date:datereslt 
+         }
+        }
+      ]);
         Article.aggregatePaginate(
-            null,
+          aggregateQuery,
             {
                 page: parseInt(req.body.page) || 1,
                 limit: 2,
@@ -19,7 +28,6 @@ function getArticle(req, res) {
             }
         );
     } catch (e) {
-        console.log(e);
         res.status(500);
         res.json({ message: e.message });
     }
@@ -66,11 +74,12 @@ function getArticle(req, res) {
       article.image = newFileName;
       article.date = new Date().toLocaleDateString();
       article.description = req.body.description;
+      console.log(article)
       article.save((err) => {
         if (err) {
-          res.send("can't post article ", err);
-        }
-        res.json({ message: `Post created!` });
+          res.status(500).send({message:"can't post article " +err});
+        }else{
+        res.json({ message: `Post created!` });}
       }); 
     } catch (error) {
       res.status(500).send({

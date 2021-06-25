@@ -1,3 +1,4 @@
+const { Double } = require("bson");
 let mongoose = require("mongoose");
 
 let Schema = mongoose.Schema;
@@ -8,6 +9,9 @@ let TeamSchema = Schema({
   image: String,
   logo: String,
   id_league: Number,
+  longitude:Number,
+  latitude:Number,
+  stade:String,
   name: String
 });
 

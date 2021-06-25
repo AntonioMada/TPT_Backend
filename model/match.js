@@ -1,3 +1,4 @@
+const { Double } = require("bson");
 let mongoose = require("mongoose");
 
 let Schema = mongoose.Schema;
@@ -12,6 +13,11 @@ let MatchSchema = Schema({
   date_time: Date,
   date: Date,
   time: String,
+  quote_team1:Number,
+  quote_team2:Number,
+  quote_null:Number,
+  popularite:Number,
+  id_win:Number,
 });
 MatchSchema.plugin(aggregatePaginate);
 

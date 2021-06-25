@@ -75,9 +75,10 @@ const deleteFile = (req, res, path) => {
   console.log(" imageDirectoryPath = " + imageDirectoryPath)
   fs.unlink(imageDirectoryPath, (err) => {
     if (err) {
-      res.status(400).send({
-        message: "Could not delete the file. " + err,
-      });
+      // res.status(400).send({
+      //   message: "Could not delete the file. " + err,
+      // });
+      console.log(err); 
     }
   });
 
