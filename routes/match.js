@@ -85,7 +85,7 @@ function getPopularMatch(req, res) {
       },   
       {      
       $sort: { 
-        popularite:"$popularite"
+        popularite: -1
        } 
       }
     ]);
