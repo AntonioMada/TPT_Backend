@@ -8,6 +8,7 @@ let ArticleSchema = Schema({
   image: String,
   date: Date,
   description: String,
+  titre: String
 });
 
 ArticleSchema.plugin(aggregatePaginate);
