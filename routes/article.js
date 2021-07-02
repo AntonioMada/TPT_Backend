@@ -6,7 +6,8 @@ function getArticle(req, res) {
   var date=req.query.date
   console.log(date)
   var datereslt
-  date ? datereslt=new Date(date) :datereslt={$exists: true}
+//   date ? datereslt=new Date(date) :datereslt={$exists: true}
+   date ? datereslt=date:datereslt={$exists: true}
     try {
       var aggregateQuery = Article.aggregate([     
         { 
