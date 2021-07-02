@@ -36,7 +36,7 @@ async function inscription(req, res) {
     });
 
     var token = generateToken(user);
-    res.status(200).send({ auth: true, token });
+    res.status(200).send({ auth: true, token, iduser: user.id});
   } catch (e) {
     console.log(e);
     if (e instanceof DuplicatedRowException) {
@@ -68,7 +68,7 @@ async function login(req, res) {
       throw new UserNotFoundException("Le mot de passe est incorrecte");
     }
     var token = generateToken(user);
-    res.status(200).send({ auth: true, token: token });
+    res.status(200).send({ auth: true, token: token, iduser: user.id});
   } catch (e) {
     console.log(e);
     if (e instanceof UserNotFoundException) {
