@@ -67,6 +67,9 @@ async function login(req, res) {
     if (!isPasswordValid) {
       throw new UserNotFoundException("Le mot de passe est incorrecte");
     }
+    if(user.isEnable==false){
+      throw new UserNotFoundException("utilisateur non activé");
+    }
     var token = generateToken(user);
     res.status(200).send({ auth: true, token: token, iduser: user.id});
   } catch (e) {
@@ -78,7 +81,32 @@ async function login(req, res) {
     res.status(500).send("Un problème est survenu au niveau du serveur");
   }
 }
-
+async function loginAdmin(req, res) {
+  let username = req.body.username;
+  let password = req.body.password;
+  try {
+    console.log("login()"+username+password);
+    const user = await User.findOne({ username: username });
+    if (!user) {
+      throw new UserNotFoundException("Cet utilisteur n'existe pas");
+    }
+    if(user.isEnable==false){
+      throw new UserNotFoundException("utilisateur non activé");
+    }
+    if(user.isAdmin==false){
+      throw new UserNotFoundException("utilisateur non admin");
+    }
+    var isPasswordValid = bcrypt.compareSync(password, user.password);
+    if (!isPasswordValid) {
+      throw new UserNotFoundException("Le mot de passe est incorrecte");
+    }
+    var token = generateToken(user);
+    res.status(200).send({ auth: true, token: token });
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e.message);
+  }
+}
 async function getMe(req, res) {
   console.log("getMe()");
   let username = req.body.username;
@@ -147,5 +175,6 @@ module.exports = {
   login,
   getMe,
   getAllUser,
+  loginAdmin,
   test,
 };

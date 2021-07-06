@@ -12,7 +12,8 @@ let TeamSchema = Schema({
   longitude:Number,
   latitude:Number,
   stade:String,
-  name: String
+  name: String,
+  stade:String
 });
 
 TeamSchema.plugin(aggregatePaginate);

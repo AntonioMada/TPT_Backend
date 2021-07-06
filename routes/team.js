@@ -107,6 +107,7 @@ function insertTeam(req, res, newFileName) {
   team.id = req.body.id;
   team.logo = newFileName;
   team.name = req.body.name;
+  team.stade = req.body.stade;
 
   team.id_league = req.body.id_league;
   console.log(team);
@@ -128,7 +129,8 @@ async function updateTeamWithUpload(req, res){
     await upload(req, res);
     await deleteFile(req, res, path);
     let fileExtension = req.file.originalname.split('.')[1];
-    updateTeam(req.body.id, req.body.id_league, req.body.name, `${newFileName}.${fileExtension}`, res);
+    console.log( req.body.stade);
+    updateTeam(req.body.id, req.body.id_league, req.body.name, `${newFileName}.${fileExtension}`, req.body.stade,res);
   } catch (error) {
     res.status(500).send({
       message: `Could not upload the file: ${req.file.originalname}. ${error}`,
@@ -147,8 +149,8 @@ function updateTeamWithoutUpload(req, res){
 }
 
 // Update d'un team (PUT)
-function updateTeam(id, idleague, name, image,  res) {
-    Team.findOneAndUpdate({id: id },{ id_league: idleague, name: name ,logo: image }, function (err) {
+function updateTeam(id, idleague, name, image,stad,  res) {
+    Team.findOneAndUpdate({id: id },{ id_league: idleague, name: name ,logo: image,stade:stad }, function (err) {
       console.log(idleague)
         if (err) return handleError(err);
         res.status(200).send({

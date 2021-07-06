@@ -160,12 +160,13 @@ app.route(prefix + "/historic").post(payment.paymentsHistoricByUserByType);
 app.route(prefix + "/user/investment").post(payment.topUserWithMiseMax);
 
 // axios service api grails
-// match
+// match  {"max": 5,"offset": 1 }
 app.route(prefix + "/match/mostbet").get(paris.getMatchMostBet);
 
 // users
 app.route(prefix + "/users").post(user.inscription);
 app.route(prefix + "/user/login").post(user.login);
+app.route(prefix + "/user/loginAdmin").post(user.loginAdmin);
 app.route(prefix + "/user/me").post(user.getMe);
 app.route(prefix + "/user").get(user.getAllUser);
 app.route(prefix + "/user").put(user.updatestatus);

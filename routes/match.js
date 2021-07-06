@@ -2,15 +2,16 @@ let Match = require("../model/match");
 //list match
 function getMatch(req, res) {
   try {
-    var team=parseInt(req.query.id_team)
+    var team=req.query.id_team
     var resltteam
     team ? resltteam=team :resltteam={$exists: true} //find all if don't have params
     var date=req.query.date
     var resltdate
-    date ? resltdate=date:resltdate={$exists: true} //find all if don't have params
-    var score=parseInt(req.query.score)
+    date ? resltdate=date :resltdate={$exists: true} //find all if don't have params
+    var score=req.query.score
     var resltscore
     score ? resltscore=score :resltscore={$exists: true}
+    console.log(team+date+score)
     var aggregateQuery = Match.aggregate([     
       { 
         $match: { 
@@ -178,13 +179,18 @@ function getOneMatchSpec(idmatch){
 function insertMatch(req, res) {
   let match = new Match();
   match.id = req.body.id;
-  match.team_1 = req.body.team_1;
-  match.team_2 = req.body.team_2;
+  match.team_1 = req.body.id_team1;
+  match.team_2 = req.body.id_team2;
   match.score_1 = req.body.score_1;
   match.score_2 = req.body.score_2;
   match.date_time = req.body.date;
   match.date = req.body.date;
   match.time = req.body.time;
+  match.quote_team1=req.body.quote_team1
+  match.quote_team2=req.body.quote_team2
+  match.quote_null=req.body.quote_null
+  match.popularite=req.body.popularite
+  match.id_win=req.body.id_win
 
   console.log("POST reçu :");
   console.log(match);
@@ -192,7 +198,7 @@ function insertMatch(req, res) {
     if (err) {
       res.send("cant post match ", err);
     }
-    res.json({ message: `${match.nom} saved!` });
+    res.json({ message: `${match.id} saved!` });
   });
 }
 
