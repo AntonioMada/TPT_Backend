@@ -7,7 +7,7 @@ const url = process.env.API_URL;
 
 const getMatchMostBet = async () => {
     try {
-      return await axios.get(url + "api/match/mostbet");
+      return await axios.post(url + "api/match/mostbet");
     } catch (error) {
       console.error(error);
     }

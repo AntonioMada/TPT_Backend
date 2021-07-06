@@ -1,5 +1,6 @@
 const { response } = require("express");
 let PaymentService = require("../service/payment.service");
+const { getOneMatchSpec } = require("./match");
 
 const PaymentController = {
   getPayments: async function (req, res) {
@@ -48,12 +49,15 @@ const PaymentController = {
   paymentsHistoricByUserByType: async function (req, res) {
     try {
       const usertypejson = req.body;
+      let matchhistoric = []
+      let response = await PaymentService.paymentsHistoricByUserByType(usertypejson)
       console.log("usertypejson ", usertypejson);
-      await PaymentService.paymentsHistoricByUserByType(usertypejson).then(
-        (response) => {
-          res.json(response.data);
-        }
-      );
+      let data = response.data
+      for await (var i of data){
+        const resultatmatch = await getOneMatchSpec(i.idMatch)
+        matchhistoric.push({match: resultatmatch, pari: i})
+      }
+      res.json(matchhistoric);
     } catch (e) {
       // console.log(e);
       res.status(500);

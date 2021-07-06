@@ -1,13 +1,13 @@
 const Article = require("../model/article");
 const uploadFile = require("../utils/upload");
 const { deleteFile } = require("./file.controller");
+const moment = require('moment');
 
 function getArticle(req, res) {
   var date=req.query.date
-  console.log(date)
   var datereslt
-//   date ? datereslt=new Date(date) :datereslt={$exists: true}
-   date ? datereslt=date:datereslt={$exists: true}
+  date ? datereslt=date:datereslt={$exists: true}
+  console.log(datereslt)
     try {
       var aggregateQuery = Article.aggregate([     
         { 
@@ -74,16 +74,17 @@ function getArticle(req, res) {
       let article = new Article();
       article.id = req.body.id;
       article.image = newFileName;
-      article.date = new Date().toLocaleDateString();
+      article.date = moment().format('DD/MM/YYYY');
       article.description = req.body.description;
       article.titre = req.body.titre;
-      console.log(article)
-      article.save((err) => {
-        if (err) {
-          res.status(500).send({message:"can't post article " +err});
-        }else{
-        res.json({ message: `Post created!` });}
-      }); 
+      console.log(article);
+      // article.save((err) => {
+      //   if (err) {
+      //     res.status(500).send({message:"can't post article " +err});
+      //   }else{
+        res.json({ message: `Post created!` });
+      // }
+      // }); 
     } catch (error) {
       res.status(500).send({
         message: ` Article created !  ${error}`,
