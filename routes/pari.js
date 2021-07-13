@@ -55,8 +55,8 @@ const PariController = {
 
   getPariCustom: async function (req, res) {
     try {
-      const iduser = req.query.iduser
-      console.log("iduser = " +req.query.iduser)
+      const iduser = req.body.iduser
+      console.log("iduser = " +req.body.iduser)
       await PariService.getPariCustom(iduser)
         .then((response) => {
           res.json(response.data);
