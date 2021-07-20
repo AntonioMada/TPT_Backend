@@ -1,31 +1,124 @@
 let Match = require("../model/match");
+let PariService = require("../service/pari.service");
 //list match
 function getMatch(req, res) {
   try {
-    var team=req.query.id_team
+    var team=parseInt(req.query.id_team)
     var resltteam
-    team ? resltteam=team :resltteam={$exists: true} //find all if don't have params
-    var date=req.query.date
-    var resltdate
-    date ? resltdate=date :resltdate={$exists: true} //find all if don't have params
-    var score=req.query.score
-    var resltscore
-    score ? resltscore=score :resltscore={$exists: true}
-    console.log(team+date+score)
+    if(team === undefined || team === null || isNaN(team)){ resltteam={$exists: true}}else{resltteam=team }   //find all if don't have params
+    console.log(resltteam)
     var aggregateQuery = Match.aggregate([     
       { 
         $match: { 
           $or: [{ team_1: resltteam }, { team_2:resltteam }]
        }
       },
+      {
+        $lookup: {
+          from: "teams",
+          localField: "team_1",
+          foreignField: "id",
+          as: "team_1",
+        },
+      },
+      {
+        $lookup: {
+          from: "teams",
+          localField: "team_2",
+          foreignField: "id",
+          as: "team_2",
+        },
+      },
+    ]);
+    Match.aggregatePaginate(
+      aggregateQuery,
+      {
+      
+        page: parseInt(req.query.page) || 1,
+        limit: parseInt(req.query.limit) || 10,
+      },
+      (err, sport) => {
+        if (err) {
+          res.send(err);
+        }
+        res.send(sport);
+      }
+    );
+  } catch (e) {
+    console.log(e);
+    res.status(500);
+    res.json({ message: e.message });
+  }
+}
+function getMatchFinished(req, res) {
+  try {
+    var team=parseInt(req.query.id_team)
+    var resltteam
+    if(team === undefined || team === null || isNaN(team)){ resltteam={$exists: true}}else{resltteam=team }   //find all if don't have params
+    console.log(resltteam)
+    var aggregateQuery = Match.aggregate([     
       { 
         $match: { 
-          date: resltdate
+          $or: [{ team_1: resltteam }, { team_2:resltteam }]
        }
       },
+      {
+        $match: { 
+         $or: [{score_1:{$exists: true} }, { score_2:{$exists: true} }] 
+        }
+      },
+      {
+        $lookup: {
+          from: "teams",
+          localField: "team_1",
+          foreignField: "id",
+          as: "team_1",
+        },
+      },
+      {
+        $lookup: {
+          from: "teams",
+          localField: "team_2",
+          foreignField: "id",
+          as: "team_2",
+        },
+      },
+    ]);
+    Match.aggregatePaginate(
+      aggregateQuery,
+      {
+      
+        page: parseInt(req.query.page) || 1,
+        limit: parseInt(req.query.limit) || 10,
+      },
+      (err, sport) => {
+        if (err) {
+          res.send(err);
+        }
+        res.send(sport);
+      }
+    );
+  } catch (e) {
+    console.log(e);
+    res.status(500);
+    res.json({ message: e.message });
+  }
+}
+function getMatchDontFinished(req, res) {
+  try {
+    var team=parseInt(req.query.id_team)
+    var resltteam
+    if(team === undefined || team === null || isNaN(team)){ resltteam={$exists: true}}else{resltteam=team }   //find all if don't have params
+    console.log(resltteam)
+    var aggregateQuery = Match.aggregate([     
       { 
         $match: { 
-          $or: [{ score_1:resltscore }, { score_2:resltscore }]
+          $or: [{ team_1: resltteam }, { team_2:resltteam }]
+       },
+      },
+      {
+       $match: { 
+        $or: [{score_1:{$exists: false} }, { score_2:{$exists: false} }] 
        }
       },
       {
@@ -220,14 +313,35 @@ function updateMatch(req, res) {
     },
     function (err) {
       if (err) return res.send("cant post sport ", err);
-      console.log(req.body.name + " updated");
       res.status(200).send({
         message: "Updated the match successfully!",
       });
     }
   );
 }
+async function finaliseMatch(req, res) {
 
+  let jsonObject = req.body
+  console.log(jsonObject);
+  Match.findOneAndUpdate(
+    { id: req.body.idmatch },
+    {
+      score_1: req.body.score_1,
+      score_2: req.body.score_2
+    },
+    function (err) {
+      if (err) return res.send("cant post sport ", err);
+      console.log("updated");
+    }
+  );
+  await PariService.updateDetailPariFinishedAndInsertMvnt(jsonObject)
+  .then((response) => {
+    res.json(response.data);
+  })
+  .catch(error => {
+    res.status(500).json({message: error.body})
+  })
+}
 // suppression d'un match (DELETE)
 function deleteMatch(req, res) {
   Match.findOne({ id: req.params.id }, (err, match) => {
@@ -249,5 +363,8 @@ module.exports = {
   deleteMatch,
   getOneMatch,
   getOneMatchSpec,
-  getPopularMatch
+  getPopularMatch,
+  getMatchDontFinished,
+  getMatchFinished,
+  finaliseMatch
 };

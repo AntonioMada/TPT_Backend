@@ -130,6 +130,8 @@ app
   .post(match.insertMatch)
   .put(match.updateMatch);
 
+app.route(prefix + "/matchs/finish") .get(match.getMatchFinished);
+app.route(prefix + "/matchs/dontfinish") .get(match.getMatchDontFinished);
 app.route(prefix + "/matchs/popular").get(match.getPopularMatch);
 app
   .route(prefix + "/matchs/:id")
@@ -146,6 +148,7 @@ app.route(prefix + "/pari/details/notpayed").get(paris.getPariInProgress);
 app.route(prefix + "/pari/details").post(paris.insertPariDetail);
 app.route(prefix + "/pari/statistic").get(paris.getPariStatistic);
 app.route(prefix + "/match/finished").put(paris.actionMatchFinished);
+app.route(prefix + "/matchs/mvtfinished").put(match.finaliseMatch);
 
 // axios service api grails
 // paris

@@ -1,13 +1,11 @@
 const Article = require("../model/article");
 const uploadFile = require("../utils/upload");
 const { deleteFile } = require("./file.controller");
-const moment = require('moment');
 
 function getArticle(req, res) {
   var date=req.query.date
   var datereslt
-  date ? datereslt=date:datereslt={$exists: true}
-  console.log(datereslt)
+  date ? datereslt=new Date(date) :datereslt={$exists: true}
     try {
       var aggregateQuery = Article.aggregate([     
         { 
@@ -74,17 +72,16 @@ function getArticle(req, res) {
       let article = new Article();
       article.id = req.body.id;
       article.image = newFileName;
-      article.date = moment().format('DD/MM/YYYY');
+      article.date = new Date().toLocaleDateString();
       article.description = req.body.description;
       article.titre = req.body.titre;
-      console.log(article);
-      // article.save((err) => {
-      //   if (err) {
-      //     res.status(500).send({message:"can't post article " +err});
-      //   }else{
-        res.json({ message: `Post created!` });
-      // }
-      // }); 
+      console.log(article)
+      article.save((err) => {
+        if (err) {
+          res.status(500).send({message:"can't post article " +err});
+        }else{
+        res.json({ message: `Post created!` });}
+      }); 
     } catch (error) {
       res.status(500).send({
         message: ` Article created !  ${error}`,
@@ -103,7 +100,7 @@ async function updateArticleWithUpload(req, res) {
       await upload(req, res);
       await deleteFile(req, res, path);
       let fileExtension = req.file.originalname.split('.')[1];
-      updateArticle(req.body.id, req.body.description, `${newFileName}.${fileExtension}`, req.body.titre, res);
+      updateArticle(req.body.id, req.body.description, `${newFileName}.${fileExtension}`, req.body.titre,res);
   } catch (error) {
     res.status(500).send({
       message: ` File : ${req.body.image} is not uploaded !  ${error}`,
@@ -113,7 +110,7 @@ async function updateArticleWithUpload(req, res) {
 
 function updateArticleWithoutUpload(req, res){
   try {
-    updateArticle(req.body.id, req.body.description, req.body.image, req.body.titre, res);
+    updateArticle(req.body.id, req.body.description, req.body.image,req.body.titre, res);
   } catch (error) {
     res.status(500).send({
       message: ` Article is not updated !  ${error}`,
@@ -121,8 +118,8 @@ function updateArticleWithoutUpload(req, res){
   }
 }
 
-function updateArticle(id, description, image, titre, res){
-  Article.findOneAndUpdate({id: id },{ description: description, image: image, titre: titre }, function (err) {
+function updateArticle(id, description, image,titre, res){
+  Article.findOneAndUpdate({id: id },{ description: description, image: image,titre:titre }, function (err) {
     if (err) return handleError(err);
     res.status(200).send({
       message: "Updated the Article successfully!",

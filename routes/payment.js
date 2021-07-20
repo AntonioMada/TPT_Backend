@@ -54,18 +54,9 @@ const PaymentController = {
       console.log("usertypejson ", usertypejson);
       let data = response.data
       for await (var i of data){
-        let gain = 0
-        let perte = 0
         const resultatmatch = await getOneMatchSpec(i.idMatch)
-        if(resultatmatch[0] !== undefined){
-          if(resultatmatch[0].id_win != null){
-            if(i.idTeamParie == resultatmatch[0].id_win) gain = i.amountWithQuote
-            else perte = i.amount
-          }
-        }
-        matchhistoric.push({match: resultatmatch[0], pari: i, gain: gain, perte: perte})
+        matchhistoric.push({match: resultatmatch, pari: i})
       }
-
       res.json(matchhistoric);
     } catch (e) {
       // console.log(e);

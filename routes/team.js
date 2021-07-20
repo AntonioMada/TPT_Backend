@@ -140,7 +140,7 @@ async function updateTeamWithUpload(req, res){
 
 function updateTeamWithoutUpload(req, res){
   try {
-    updateTeam(req.body.id, req.body.id_league, req.body.name, req.body.logo, res);
+    updateTeam(req.body.id, req.body.id_league, req.body.name, req.body.logo,req.body.stade, res);
   } catch (error) {
     res.status(500).send({
       message: ` Team : ${req.body.name} is not updated !  ${error}`,
