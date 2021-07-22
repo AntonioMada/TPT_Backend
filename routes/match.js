@@ -6,7 +6,7 @@ function getMatch(req, res) {
     var team=parseInt(req.query.id_team)
     var resltteam
     if(team === undefined || team === null || isNaN(team)){ resltteam={$exists: true}}else{resltteam=team }   //find all if don't have params
-    var date=req.query.date
+    var date=new Date(req.query.date);
     var resltdate
     if(date === undefined || date === null || isNaN(date)){ resltdate={$exists: true}}else{resltdate=date }  
     var score=req.query.score
