@@ -18,7 +18,7 @@ function getArticle(req, res) {
           aggregateQuery,
             {
                 page: parseInt(req.body.page) || 1,
-                limit: 2,
+                limit: parseInt(req.body.limit) || 10,
             },
             (err, article) => {
             if (err) {
