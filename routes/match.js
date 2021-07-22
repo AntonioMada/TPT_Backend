@@ -6,11 +6,27 @@ function getMatch(req, res) {
     var team=parseInt(req.query.id_team)
     var resltteam
     if(team === undefined || team === null || isNaN(team)){ resltteam={$exists: true}}else{resltteam=team }   //find all if don't have params
+    var date=req.query.date
+    var resltdate
+    date ? resltdate=date :resltdate={$exists: true} //find all if don't have params
+    var score=req.query.score
+    var resltscore
+    score ? resltscore=score :resltscore={$exists: true}
     console.log(resltteam)
     var aggregateQuery = Match.aggregate([     
       { 
         $match: { 
           $or: [{ team_1: resltteam }, { team_2:resltteam }]
+       }
+      },
+      { 
+        $match: {  
+          date: resltdate
+       }
+      },
+      { 
+        $match: {  
+          $or: [{ score_1:resltscore }, { score_2:resltscore }]
        }
       },
       {

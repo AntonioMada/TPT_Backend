@@ -85,7 +85,6 @@ async function loginAdmin(req, res) {
   let username = req.body.username;
   let password = req.body.password;
   try {
-    console.log("login()"+username+password);
     const user = await User.findOne({ username: username });
     if (!user) {
       throw new UserNotFoundException("Cet utilisteur n'existe pas");
