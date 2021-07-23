@@ -162,10 +162,21 @@ async function updatestatus(req, res) {
     res.json({ message: e.message });
   }
 }
-async function test(req, res) {
-  res.status(200).send({
-    message: "Hello world !!!!!",
-  });
+async function getMeInfo(req, res) {
+  console.log("getMe()");
+  let iduser = req.body.iduser;
+  try {
+    const user = await User.findOne({ id: iduser });
+    if (!user) {
+      throw new UserNotFoundException("Cet utilisteur n'existe pas");
+    }
+    res.status(200).send(user);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .send("Un problème est survenu lors de la recherche de l'utilisateur");
+  }
 }
 module.exports = {
   updatestatus,
@@ -175,5 +186,5 @@ module.exports = {
   getMe,
   getAllUser,
   loginAdmin,
-  test,
+  getMeInfo,
 };

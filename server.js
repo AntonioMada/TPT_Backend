@@ -174,7 +174,7 @@ app.route(prefix + "/user/me").post(user.getMe);
 app.route(prefix + "/user").get(user.getAllUser);
 app.route(prefix + "/user").put(user.updatestatus);
 
-app.route(prefix + "/test").get(user.test);
+app.route(prefix + "/user/info").post(user.getMeInfo);
 //classement
 app.route(prefix + "/classement").get(classement.getClassementDomicile);
 
