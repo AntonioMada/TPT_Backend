@@ -57,6 +57,9 @@ const PaymentController = {
         let gain = 0
         let perte = 0
         const resultatmatch = await getOneMatchSpec(i.idMatch)
+<<<<<<< HEAD
+        matchhistoric.push({match: resultatmatch, pari: i})
+=======
         if(resultatmatch[0] !== undefined){
           if(resultatmatch[0].id_win != null){
             if(i.idTeamParie == resultatmatch[0].id_win) gain = i.amountWithQuote
