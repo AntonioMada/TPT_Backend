@@ -34,7 +34,6 @@ function getArticle(req, res) {
   }
 
   function getOneArticle(req, res) {
-    console.log("call getOneArticle()");
     var id = Number(req.params.id);
   
     Article.aggregate(
@@ -53,7 +52,6 @@ function getArticle(req, res) {
 
   async function insertArticleWithUpload(req ,res){
     try {
-      console.log("insert Article with upload image");
       let newFileName = `article-${ new Date().getTime() }`;
       let path = "articles";
       let upload = uploadFile(path, newFileName);
@@ -75,7 +73,6 @@ function getArticle(req, res) {
       article.date = new Date().toLocaleDateString();
       article.description = req.body.description;
       article.titre = req.body.titre;
-      console.log(article)
       article.save((err) => {
         if (err) {
           res.status(500).send({message:"can't post article " +err});
@@ -93,7 +90,7 @@ function getArticle(req, res) {
 // Update d'un Article (PUT)
 async function updateArticleWithUpload(req, res) {
   try {
-      console.log("update Article with upload image");
+      console.log(req.body);
       let newFileName = `Article-${ new Date().getTime() }`;
       let path = "Articles";
       let upload = uploadFile(path, newFileName);
