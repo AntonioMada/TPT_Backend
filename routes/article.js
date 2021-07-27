@@ -91,8 +91,8 @@ function getArticle(req, res) {
 async function updateArticleWithUpload(req, res) {
   try {
       console.log(req.body);
-      let newFileName = `Article-${ new Date().getTime() }`;
-      let path = "Articles";
+      let newFileName = `article-${ new Date().getTime() }`;
+      let path = "articles";
       let upload = uploadFile(path, newFileName);
       await upload(req, res);
       await deleteFile(req, res, path);
