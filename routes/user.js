@@ -15,6 +15,7 @@ async function inscription(req, res) {
   let birthday = req.body.birthday;
   let password = req.body.password;
   let isAdmin = req.body.isAdmin;
+  let isEnable = req.body.isEnable;
 
   try {
     var hashedPassword = bcrypt.hashSync(password);
@@ -32,7 +33,8 @@ async function inscription(req, res) {
       address: address,
       birthday: birthday,
       password: hashedPassword,
-      isAdmin,
+      isAdmin : isAdmin,
+      isEnable: isEnable
     });
 
     var token = generateToken(user);
