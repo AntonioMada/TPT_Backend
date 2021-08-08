@@ -162,6 +162,31 @@ async function updatestatus(req, res) {
     res.json({ message: e.message });
   }
 }
+async function updateUser(req, res) {
+  try {
+    const user = await User.findOne({ id: req.body.id });
+    await User.updateOne(
+      { id: user.id },
+      { 
+        email: req.body.email, 
+        name: req.body.name, 
+        username: req.body.username, 
+        address: req.body.address,
+        birthday: req.body.birthday,
+        password: req.body.password 
+      }
+    );
+    if (!user) {
+      throw new UserNotFoundException("Cet utilisteur n'existe pas");
+    }
+    res.status(200).send({
+      message: "Updated the use:  " + user.name + " successfully!",
+    });
+  } catch (e) {
+    res.status(500);
+    res.json({ message: e.message });
+  }
+}
 async function getMeInfo(req, res) {
   console.log("getMe()");
   let iduser = req.body.iduser;
@@ -180,6 +205,7 @@ async function getMeInfo(req, res) {
 }
 module.exports = {
   updatestatus,
+  updateUser,
   inscription,
   generateToken,
   login,

@@ -173,6 +173,7 @@ app.route(prefix + "/user/loginAdmin").post(user.loginAdmin);
 app.route(prefix + "/user/me").post(user.getMe);
 app.route(prefix + "/user").get(user.getAllUser);
 app.route(prefix + "/user").put(user.updatestatus);
+app.route(prefix + "/user/update/profil").put(user.updateUser);
 
 app.route(prefix + "/user/info").post(user.getMeInfo);
 //classement
