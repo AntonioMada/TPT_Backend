@@ -167,6 +167,7 @@ async function updatestatus(req, res) {
 async function updateUser(req, res) {
   try {
     const user = await User.findOne({ id: req.body.id });
+    var hashedPassword = bcrypt.hashSync(req.body.password );
     await User.updateOne(
       { id: user.id },
       { 
@@ -175,7 +176,7 @@ async function updateUser(req, res) {
         username: req.body.username, 
         address: req.body.address,
         birthday: req.body.birthday,
-        password: req.body.password 
+        password: hashedPassword
       }
     );
     if (!user) {
