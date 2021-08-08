@@ -175,7 +175,7 @@ async function updateUser(req, res) {
         name: req.body.name, 
         username: req.body.username, 
         address: req.body.address,
-        birthday: req.body.birthday,
+        birthday: new Date(req.body.birthday),
         password: hashedPassword
       }
     );
