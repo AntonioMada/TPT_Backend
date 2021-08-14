@@ -1,7 +1,7 @@
 let Sport = require("../model/sport");
 const uploadFile = require("../utils/upload");
 const { deleteFile } = require("./file.controller");
-;
+let FirebaseService = require("../service/firebase.service");
 //list sport
 function getSport(req, res) {
   console.log("call getSport()");
@@ -36,7 +36,16 @@ function getSport(req, res) {
     res.json({ message: e.message });
   }
 }
-
+async function postmsg(req,res){
+  try{
+    FirebaseService.postmsg().then((response) => {
+      res.json(response.data);
+    });
+    
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+}
 function getOneSport(req, res) {
   var id = Number(req.params.id);
 
@@ -163,5 +172,6 @@ module.exports = {
  updateSportWithUpload,
  updateSportWithoutUpload,
  deleteSport,
- getOneSport
+ getOneSport,
+ postmsg
 };

@@ -2,6 +2,7 @@ const { response, json } = require("express");
 let PariService = require("../service/pari.service");
 let MatchService = require("../service/match.service");
 const { getOneMatchSpec } = require("./match");
+const { getOneTeamSpec } = require("./team");
 
 const PariController = {
 
@@ -107,13 +108,14 @@ const PariController = {
 
   getPariStatistic: async function(req,res){
     try {
-      await PariService.getPariStatistic()
-        .then((response) => {
-          res.json(response.data);
-        })
-        .catch(error => {
-          res.status(500).json({message: error.message})
-        });
+      let pari = []
+      let response = await PariService.getPariStatistic()
+      for await (var i of response.data){
+        const team = await getOneTeamSpec(i.team)
+        pari.push({count: i.count, team:i.team, team_detail: team})
+      }
+      console.log(pari)
+      res.json(pari);
     } catch (error) {
       res.status(500).json({message: error.message})
     }
@@ -139,6 +141,21 @@ const PariController = {
     try {
       let jsonObject = req.body
       await PariService.updateDetailPariFinishedAndInsertMvnt(jsonObject)
+        .then((response) => {
+          res.json(response.data);
+        })
+        .catch(error => {
+          res.status(500).json({message: error.body})
+        })
+    } catch (error) {
+      res.status(500).json({message: error.message})
+    }
+  },
+  parisParMois: async function(req, res){
+    try {
+      let year =req.params.year;
+      console.log(year)
+      await PariService.getParisParMois(year)
         .then((response) => {
           res.json(response.data);
         })

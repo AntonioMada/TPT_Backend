@@ -84,7 +84,31 @@ function getOneTeam(req, res) {
     }
   );
 }
-
+function getOneTeamSpec(idTeam) {
+  var id = Number(idTeam);
+   return Team.aggregate(
+    [
+      { $match: { id: id } },
+      {
+        $lookup: {
+          from: "leagues",
+          localField: "id_league",
+          foreignField: "id",
+          as: "league",
+        },
+      },
+      { $unwind: "$league" },
+      {
+        $lookup: {
+          from: "sports",
+          localField: "league.id_sport",
+          foreignField: "id",
+          as: "sport",
+        },
+      },
+    ]
+  );
+}
   async function insertTeamWithUpload(req, res){
     try {
       console.log("insert team with upload image");
@@ -179,5 +203,6 @@ module.exports = {
  updateTeamWithUpload,
  updateTeamWithoutUpload,
  deleteTeam,
- getOneTeam
+ getOneTeam,
+ getOneTeamSpec
 };

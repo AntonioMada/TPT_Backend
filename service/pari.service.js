@@ -80,6 +80,13 @@ const updateDetailPariFinishedAndInsertMvnt = async(jsonObject) => {
     console.error(error)
   }
 }
+const getParisParMois = async (year) => {
+  try {
+    return await axios.get(url + "api/pari/match/count", {params: {year: year}});
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 module.exports = {
   getParis,
@@ -90,5 +97,6 @@ module.exports = {
   getPariInProgress,
   insertPariDetail,
   getPariStatistic,
-  updateDetailPariFinishedAndInsertMvnt
+  updateDetailPariFinishedAndInsertMvnt,
+  getParisParMois
 };

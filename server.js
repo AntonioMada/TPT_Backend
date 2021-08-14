@@ -71,6 +71,9 @@ app
   .get(sport.getSport)
   .put(sport.updateSportWithoutUpload)
   .post(sport.insertSportWithUpload);
+  
+app
+.route(prefix + "/firebase").post(sport.postmsg);
 
 app.route(prefix + "/sports/file").post(sport.updateSportWithUpload);
 
@@ -147,6 +150,7 @@ app.route(prefix + "/pari/custom").get(paris.getPariCustom);
 app.route(prefix + "/pari/details/notpayed").get(paris.getPariInProgress);
 app.route(prefix + "/pari/details").post(paris.insertPariDetail);
 app.route(prefix + "/pari/statistic").get(paris.getPariStatistic);
+app.route(prefix + "/pari/mois/:year").get(paris.parisParMois);
 app.route(prefix + "/match/finished").put(paris.actionMatchFinished);
 app.route(prefix + "/matchs/mvtfinished").put(match.finaliseMatch);
 
@@ -173,7 +177,6 @@ app.route(prefix + "/user/loginAdmin").post(user.loginAdmin);
 app.route(prefix + "/user/me").post(user.getMe);
 app.route(prefix + "/user").get(user.getAllUser);
 app.route(prefix + "/user").put(user.updatestatus);
-app.route(prefix + "/user/update/profil").put(user.updateUser);
 
 app.route(prefix + "/user/info").post(user.getMeInfo);
 //classement

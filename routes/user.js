@@ -8,6 +8,8 @@ const user = require("../model/user");
 const { findOneAndUpdate } = require("../model/user");
 
 async function inscription(req, res) {
+  console.log("inscription()");
+  console.log(req.body);
   let email = req.body.email;
   let name = req.body.name;
   let username = req.body.username;
@@ -33,8 +35,8 @@ async function inscription(req, res) {
       address: address,
       birthday: birthday,
       password: hashedPassword,
-      isAdmin : isAdmin,
-      isEnable: isEnable
+      isAdmin,
+      isEnable,
     });
 
     var token = generateToken(user);
@@ -164,32 +166,6 @@ async function updatestatus(req, res) {
     res.json({ message: e.message });
   }
 }
-async function updateUser(req, res) {
-  try {
-    const user = await User.findOne({ id: req.body.id });
-    var hashedPassword = bcrypt.hashSync(req.body.password );
-    await User.updateOne(
-      { id: user.id },
-      { 
-        email: req.body.email, 
-        name: req.body.name, 
-        username: req.body.username, 
-        address: req.body.address,
-        birthday: new Date(req.body.birthday),
-        password: hashedPassword
-      }
-    );
-    if (!user) {
-      throw new UserNotFoundException("Cet utilisteur n'existe pas");
-    }
-    res.status(200).send({
-      message: "Updated the use:  " + user.name + " successfully!",
-    });
-  } catch (e) {
-    res.status(500);
-    res.json({ message: e.message });
-  }
-}
 async function getMeInfo(req, res) {
   console.log("getMe()");
   let iduser = req.body.iduser;
@@ -208,7 +184,6 @@ async function getMeInfo(req, res) {
 }
 module.exports = {
   updatestatus,
-  updateUser,
   inscription,
   generateToken,
   login,
