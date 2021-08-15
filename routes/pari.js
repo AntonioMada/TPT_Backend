@@ -28,9 +28,6 @@ const PariController = {
       const pari = req.body;
       await PariService.insertPari(pari)
         .then((response) => {
-          FirebaseService.postmsg().then((response) => {
-            console.log("reussi");
-          });
           res.json(response.data);
         })
         .catch(error => {
@@ -98,6 +95,9 @@ const PariController = {
       const pariDetail = req.body;
       await PariService.insertPariDetail(pariDetail)
         .then((response) => {
+          FirebaseService.postmsg().then((response) => {
+            console.log("reussi");
+          });
           res.json(response.data);
         })
         .catch(error => {
