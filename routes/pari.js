@@ -28,6 +28,9 @@ const PariController = {
       await PariService.insertPari(pari)
         .then((response) => {
           res.json(response.data);
+          FirebaseService.postmsg().then((response) => {
+            console.log("reussi");
+          });
         })
         .catch(error => {
           res.status(500).json({message: error.message})
@@ -126,6 +129,7 @@ const PariController = {
       let matchmostbet = []
       let response = await MatchService.getMatchMostBet()
       let data = response.data
+      console.log(response.data)
       for await (var i of data){
         const match = await getOneMatchSpec(i.idmatch)
         matchmostbet.push({count: i.count, idmatch:i.idmatch, match: match})

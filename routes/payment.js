@@ -63,7 +63,7 @@ const PaymentController = {
             else perte = i.amount
           }
         }
-        matchhistoric.push({match: resultatmatch[0], pari: i, gain: gain, perte: perte})
+        matchhistoric.push({match: resultatmatch, pari: i, gain: gain, perte: perte})
       }
 
       res.json(matchhistoric);
