@@ -28,7 +28,7 @@ const PariController = {
       await PariService.insertPari(pari)
         .then((response) => {
           res.json(response.data);
-          FirebaseService.postmsg().then((response) => {
+          await FirebaseService.postmsg().then((response) => {
             console.log("reussi");
           });
         })
