@@ -4,6 +4,7 @@ let MatchService = require("../service/match.service");
 const { getOneMatchSpec } = require("./match");
 const { getOneTeamSpec } = require("./team");
 
+let FirebaseService = require("../service/firebase.service");
 const PariController = {
 
   getParis: async function (req, res) {
@@ -28,7 +29,7 @@ const PariController = {
       await PariService.insertPari(pari)
         .then((response) => {
           res.json(response.data);
-          await FirebaseService.postmsg().then((response) => {
+          FirebaseService.postmsg().then((response) => {
             console.log("reussi");
           });
         })
