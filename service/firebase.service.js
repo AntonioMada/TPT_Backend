@@ -4,7 +4,7 @@ const postmsg = async () => {
         { 
         "notification": {
         "title": "Hi admin", 
-        "body": "Un utilisateur a effectue un pari"
+        "body": "Un utilisateur a éffectué un pari"
         },
         "to":"d2En0TTRurekk1cx1igz0D:APA91bHwJCKC3SCl0aHYdDKpwFNg13XoJxE6PnYmf71FS9NR312XAMSuDCbqp3X35-KLO6RkpNdpzXzbi8TUPm1pwr3jZVENUahkDJ-ydzwSuTDkwdVlbQlMkMT1KJCYRqIzlubWJke2"
         }
