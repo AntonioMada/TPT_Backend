@@ -342,7 +342,8 @@ async function finaliseMatch(req, res) {
     { id: req.body.idmatch },
     {
       score_1: req.body.score_1,
-      score_2: req.body.score_2
+      score_2: req.body.score_2,
+      id_win: req.body.idteamwinner
     },
     function (err) {
       if (err) return res.send("cant post sport ", err);
