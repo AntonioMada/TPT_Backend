@@ -354,7 +354,7 @@ async function finaliseMatch(req, res) {
       console.log("updated");
       let team1 = await TeamService.getTeamById(matchUpdated.team_1);
       let team2 = await TeamService.getTeamById(matchUpdated.team_2);
-      sport.notifyMobile(team1, team2, req.body.score_1, req.body.score_2);
+      sport.notifyMobile(team1[0].name, team2[0].name, req.body.score_1, req.body.score_2);
     }
   );
   await PariService.updateDetailPariFinishedAndInsertMvnt(jsonObject)
