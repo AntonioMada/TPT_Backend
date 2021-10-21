@@ -19,10 +19,6 @@ function getSport(req, res) {
     Sport.aggregatePaginate(
       aggregateQuery,
       {
-<<<<<<< .merge_file_a04396
-      
-=======
->>>>>>> .merge_file_a06576
         page: parseInt(req.query.page) || 1,
         limit: parseInt(req.query.limit) || 10,
       },
@@ -39,14 +35,6 @@ function getSport(req, res) {
     res.json({ message: e.message });
   }
 }
-<<<<<<< .merge_file_a04396
-async function postmsg(req,res){
-  try{
-    FirebaseService.postmsg().then((response) => {
-      res.json(response.data);
-    });
-    
-=======
 async function postmsg(req, res) {
   try {
     FirebaseService.postmsg().then((response) => {
@@ -61,7 +49,6 @@ async function notifyMobile(team1, team2, score_1, score_2, req, res) {
     FirebaseService.notifyMobile(team1, team2, score_1, score_2).then((response) => {
       res.json(response);
     });
->>>>>>> .merge_file_a06576
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
@@ -123,11 +110,7 @@ function insertSport(req, res, newFileName) {
         res.send("can't post sport ", err);
       }
       res.json({ message: `${sport.name}  ` });
-<<<<<<< .merge_file_a04396
-    }); 
-=======
     });
->>>>>>> .merge_file_a06576
   } catch (error) {
     res.status(500).send({
       message: ` Sport : ${req.body.name} is not inserted !  ${err}`,
@@ -138,17 +121,6 @@ function insertSport(req, res, newFileName) {
 // Update d'un sport (PUT)
 async function updateSportWithUpload(req, res) {
   try {
-<<<<<<< .merge_file_a04396
-      console.log("update sport with upload image");
-      let newFileName = `sport-${ new Date().getTime() }`;
-      let path = "sports";
-      let upload = uploadFile(path, newFileName);
-      await upload(req, res);
-      await deleteFile(req, res, path);
-      let fileExtension = req.file.originalname.split('.')[1];
-      // console.log(req.body);
-      updateSport(req.body.id, req.body.name, `${newFileName}.${fileExtension}`, res);
-=======
     console.log("update sport with upload image");
     let newFileName = `sport-${new Date().getTime()}`;
     let path = "sports";
@@ -163,7 +135,6 @@ async function updateSportWithUpload(req, res) {
       `${newFileName}.${fileExtension}`,
       res
     );
->>>>>>> .merge_file_a06576
   } catch (error) {
     res.status(500).send({
       message: ` File : ${req.body.image} is not uploaded !  ${error}`,
@@ -171,11 +142,7 @@ async function updateSportWithUpload(req, res) {
   }
 }
 
-<<<<<<< .merge_file_a04396
-function updateSportWithoutUpload(req, res){
-=======
 function updateSportWithoutUpload(req, res) {
->>>>>>> .merge_file_a06576
   try {
     updateSport(req.body.id, req.body.name, req.body.image, res);
   } catch (error) {
@@ -185,18 +152,6 @@ function updateSportWithoutUpload(req, res) {
   }
 }
 
-<<<<<<< .merge_file_a04396
-function updateSport(id, name, image, res){
-  console.log("id = " + id)
-  console.log("name = " + name)
-  console.log("image = " + image)
-  Sport.findOneAndUpdate({id: id },{ name: name, image: image }, function (err) {
-    if (err) return handleError(err);
-    res.status(200).send({
-      message: "Updated the sport: " + name + " successfully!",
-    });
-  });
-=======
 function updateSport(id, name, image, res) {
   console.log("id = " + id);
   console.log("name = " + name);
@@ -211,7 +166,6 @@ function updateSport(id, name, image, res) {
       });
     }
   );
->>>>>>> .merge_file_a06576
 }
 
 // suppression d'un sport (DELETE)
@@ -229,15 +183,6 @@ function deleteSport(req, res) {
 }
 
 module.exports = {
-<<<<<<< .merge_file_a04396
- getSport,
- insertSportWithUpload,
- updateSportWithUpload,
- updateSportWithoutUpload,
- deleteSport,
- getOneSport,
- postmsg
-=======
   getSport,
   insertSportWithUpload,
   updateSportWithUpload,
@@ -246,5 +191,4 @@ module.exports = {
   getOneSport,
   postmsg,
   notifyMobile,
->>>>>>> .merge_file_a06576
 };
