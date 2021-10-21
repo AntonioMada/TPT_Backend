@@ -2,7 +2,11 @@ const { response, json } = require("express");
 let PariService = require("../service/pari.service");
 let MatchService = require("../service/match.service");
 const { getOneMatchSpec } = require("./match");
+<<<<<<< HEAD
 const { getOneTeamSpec } = require("./team");
+=======
+let TeamService = require("../service/team.service");
+>>>>>>> frontoffice-angular-tiny
 
 const PariController = {
 
@@ -27,10 +31,10 @@ const PariController = {
       const pari = req.body;
       await PariService.insertPari(pari)
         .then((response) => {
-          res.json(response.data);
           FirebaseService.postmsg().then((response) => {
             console.log("reussi");
           });
+          res.json(response.data);
         })
         .catch(error => {
           res.status(500).json({message: error.message})

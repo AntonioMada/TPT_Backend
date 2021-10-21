@@ -71,9 +71,9 @@ app
   .get(sport.getSport)
   .put(sport.updateSportWithoutUpload)
   .post(sport.insertSportWithUpload);
-  
-app
-.route(prefix + "/firebase").post(sport.postmsg);
+
+app.route(prefix + "/firebase").post(sport.postmsg);
+app.route(prefix + "/firebase/mobile").post(sport.notifyMobile);
 
 app.route(prefix + "/sports/file").post(sport.updateSportWithUpload);
 
@@ -133,8 +133,8 @@ app
   .post(match.insertMatch)
   .put(match.updateMatch);
 
-app.route(prefix + "/matchs/finish") .get(match.getMatchFinished);
-app.route(prefix + "/matchs/dontfinish") .get(match.getMatchDontFinished);
+app.route(prefix + "/matchs/finish").get(match.getMatchFinished);
+app.route(prefix + "/matchs/dontfinish").get(match.getMatchDontFinished);
 app.route(prefix + "/matchs/popular").get(match.getPopularMatch);
 app
   .route(prefix + "/matchs/:id")
