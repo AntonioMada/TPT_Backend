@@ -1,5 +1,7 @@
 let Match = require("../model/match");
 let PariService = require("../service/pari.service");
+let sport = require("./sport");
+let TeamService = require("../service/team.service");
 //list match
 function getMatch(req, res) {
   try {
@@ -340,16 +342,19 @@ async function finaliseMatch(req, res) {
 
   let jsonObject = req.body
   console.log(jsonObject);
-  Match.findOneAndUpdate(
+  let matchUpdated = Match.findOneAndUpdate(
     { id: req.body.idmatch },
     {
       score_1: req.body.score_1,
       score_2: req.body.score_2,
       id_win: req.body.idteamwinner
     },
-    function (err) {
+    async function (err) {
       if (err) return res.send("cant post sport ", err);
       console.log("updated");
+      let team1 = await TeamService.getTeamById(matchUpdated.team_1);
+      let team2 = await TeamService.getTeamById(matchUpdated.team_2);
+      sport.notifyMobile(team1, team2, req.body.score_1, req.body.score_2);
     }
   );
   await PariService.updateDetailPariFinishedAndInsertMvnt(jsonObject)
