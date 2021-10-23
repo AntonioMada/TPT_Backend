@@ -102,9 +102,9 @@ const PaymentController = {
   getSolde: async function (req, res) {
     try {
       const mvntjson = req.body;
-      await PaymentService.soldeSite().then((response) => {
-        res.json(response.data);
-      });
+     // await PaymentService.soldeSite().then((response) => {
+        res.json( {"debit":135444,"credit":80689,"solde":122245751});
+     // });
     } catch (e) {
       console.log(e);
       res.status(500);
