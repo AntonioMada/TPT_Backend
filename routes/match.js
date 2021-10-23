@@ -352,11 +352,12 @@ async function finaliseMatch(req, res) {
     async function (err) {
       if (err) return res.send("cant post sport ", err);
       console.log("updated");
-      let team1 = await TeamService.getTeamById(matchUpdated.team_1);
-      let team2 = await TeamService.getTeamById(matchUpdated.team_2);
-      sport.notifyMobile(team1[0].name, team2[0].name, req.body.score_1, req.body.score_2);
     }
   );
+  
+  let team1 = await TeamService.getTeamById(matchUpdated.team_1);
+  let team2 = await TeamService.getTeamById(matchUpdated.team_2);
+  sport.notifyMobile(team1[0].name, team2[0].name, req.body.score_1, req.body.score_2);
   await PariService.updateDetailPariFinishedAndInsertMvnt(jsonObject)
   .then((response) => {
     res.json(response.data);
