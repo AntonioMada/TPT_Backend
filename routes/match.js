@@ -207,7 +207,7 @@ function getPopularMatch(req, res) {
       {
       
         page: parseInt(req.query.page) || 1,
-        limit: parseInt(req.query.limit) || 5,
+        limit: parseInt(req.query.limit) || 85,
       },
       (err, sport) => {
         if (err) {
