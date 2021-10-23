@@ -64,7 +64,11 @@ const mvntAfterMatch = async (mvntjson) => {
 
 const soldeSite = async () => {
   try {
-    return await axios.get(url + "/api/solde/site");
+    let static = {
+      "debit":135444,"credit":80689,"solde":122245751
+    }
+    return await static; 
+    //await axios.get(url + "/api/solde/site");
   } catch (error) {
     console.error(error);
   }
